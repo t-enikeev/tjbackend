@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tjournal
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - '5432:5432'
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  pgadmin:
+    links:
+      - postgres:postgres
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: kliod@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    command:
+      - echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data//pg_hba.conf
+      - echo "listen_addresses='*'" >> var/lib/postgresql/data/postgresql.conf
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+    ports:
+      - '${PGADMIN_PORT:-5050}:80'
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
