@@ -2,23 +2,23 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
   CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 // import { IsEmail } from 'class-validator';
-@Entity('users')
-export class UserEntity {
+@Entity('posts')
+export class PostEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  fullName: string;
+  title: string;
 
   @Column()
-  email: string;
+  body: string;
 
   @Column({ nullable: true })
-  password?: string;
+  tags?: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   createAt: Date;
